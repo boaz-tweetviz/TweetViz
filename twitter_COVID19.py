@@ -26,51 +26,47 @@ class StdOutListener(StreamListener):
         except:
             lat = np.nan
             long = np.nan
-        try:
-            if ('RT' in message['text']) and ('retweeted_status' in message.keys()):  # 리트윗
-                status = 'RT'
-                post_id = message['retweeted_status']['id']
-                screen_name = message['retweeted_status']['user']['screen_name']
-                user_id = message['retweeted_status']['user']['id']
-                profile = message['retweeted_status']['user']['profile_image_url']
-                time = datetime.strftime(datetime.strptime(message['retweeted_status']['user']['created_at'],'%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%d %H:%M:%S')
+        if ('RT' in message['text']) and ('retweeted_status' in message.keys()):  # 리트윗
+            status = 'RT'
+            post_id = message['retweeted_status']['id']
+            screen_name = message['retweeted_status']['user']['screen_name']
+            user_id = message['retweeted_status']['user']['id']
+            profile = message['retweeted_status']['user']['profile_image_url']
+            time = datetime.strftime(datetime.strptime(message['retweeted_status']['user']['created_at'],'%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%d %H:%M:%S')
 
-                try:
-                    text = message['retweeted_status']['extended_tweet']['full_text']
-                except:
-                    text = message['retweeted_status']['text']
-                retweets = message['retweeted_status']['retweet_count']
-                likes = message['retweeted_status']['favorite_count']
+            try:
+                text = message['retweeted_status']['extended_tweet']['full_text']
+            except:
+                text = message['retweeted_status']['text']
+            retweets = message['retweeted_status']['retweet_count']
+            likes = message['retweeted_status']['favorite_count']
 
-            elif 'quoted_status' in message.keys():
-                status = 'QUOTED'
-                post_id = message['quoted_status']['id']
-                screen_name = message['quoted_status']['user']['screen_name']
-                user_id = message['quoted_status']['user']['id']
-                profile = message['quoted_status']['user']['profile_image_url']
-                time = datetime.strftime(datetime.strptime(message['quoted_status']['user']['created_at'],'%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%d %H:%M:%S')
+        elif 'quoted_status' in message.keys():
+            status = 'QUOTED'
+            post_id = message['quoted_status']['id']
+            screen_name = message['quoted_status']['user']['screen_name']
+            user_id = message['quoted_status']['user']['id']
+            profile = message['quoted_status']['user']['profile_image_url']
+            time = datetime.strftime(datetime.strptime(message['quoted_status']['user']['created_at'],'%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%d %H:%M:%S')
 
-                try:
-                    text = message['quoted_status']['extended_tweet']['full_text']
-                except:
-                    text = message['quoted_status']['text']
-                retweets = message['quoted_status']['retweet_count']
-                likes = message['quoted_status']['favorite_count']
+            try:
+                text = message['quoted_status']['extended_tweet']['full_text']
+            except:
+                text = message['quoted_status']['text']
+            retweets = message['quoted_status']['retweet_count']
+            likes = message['quoted_status']['favorite_count']
 
-            else:
-                status = 'ORIGINAL'
-                post_id = message['id']
-                screen_name = message['user']['screen_name']
-                user_id = message['user']['id']
-                profile = message['user']['profile_image_url']
-                time = datetime.strftime(datetime.strptime(message['created_at'],'%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%d %H:%M:%S')
-                text = message['text']
-                retweets = message['retweet_count']
-                likes = message['favorite_count']
-        except:
-            print("err")
-            status = 'ERR'
-            pass
+        else:
+            status = 'ORIGINAL'
+            post_id = message['id']
+            screen_name = message['user']['screen_name']
+            user_id = message['user']['id']
+            profile = message['user']['profile_image_url']
+            time = datetime.strftime(datetime.strptime(message['created_at'],'%a %b %d %H:%M:%S +0000 %Y'), '%Y-%m-%d %H:%M:%S')
+            text = message['text']
+            retweets = message['retweet_count']
+            likes = message['favorite_count']
+
 
         result_json['status'] = status
         result_json['id'] = post_id
